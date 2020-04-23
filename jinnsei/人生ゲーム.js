@@ -6,11 +6,15 @@ $(function(){
     var topp=0;
     var x = 0;
     var y = 0;
+    var syoko=50;
+    var state=50;
+    var zyoko=99;
+    var ztate=103;
 
 
     var masu = new Object();
-        masu.yoko = [25,74,123,172,221];
-        masu.tate = [25,78,131,184];
+        masu.yoko = [syoko,syoko+zyoko,syoko+zyoko*2,syoko+zyoko*3,syoko+zyoko*4];
+        masu.tate = [state,state+ztate,state+ztate*2,state+ztate*3];
         masu.menn =[
             [1,2,3,4,5],
             [6,7,8,9,10],
@@ -18,28 +22,44 @@ $(function(){
             [16,17,18,19,20]
         ];
     
+    var gazo = ["",
+        "img/saikoro-illust1.png",
+        "img/saikoro-illust2.png",
+        "img/saikoro-illust3.png",
+        "img/saikoro-illust4.png",
+        "img/saikoro-illust5.png",
+        "img/saikoro-illust6.png"
+    ];
+
+    
     function pcheck(){
         left = $('#koma').position().left;
         topp = $('#koma').position().top;
     }
 
+    function gcheck(){
+        if (topp >= masu.tate[3] && left >= masu.yoko[4]){
+            document.write("ゴール");
+        };
+    }
+
     function modoru(){                       //１マス戻る
-        left = left - 49;
+        left = left - zyoko;
             $('#koma').css("left",left);
-            if (left <= 25){
-                topp = topp -53;
-                left = 221;
+            if (left <= syoko){
+                topp = topp -ztate;
+                left = masu.yoko[4];
                 $('#koma').css("left",left);
                 $('#koma').css("top",topp);                
             }
     }
 
     function susumu(){　　　　　　　　　　　　　//１マス進む
-        left = left + 49;
+        left = left + zyoko;
             $('#koma').css("left",left);
-            if (left >= 270){
-                topp = topp +53;
-                left = 25;
+            if (left >= masu.yoko[4]+zyoko){
+                topp = topp + ztate;
+                left = syoko;
                 $('#koma').css("left",left);
                 $('#koma').css("top",topp);                
             }
@@ -58,15 +78,16 @@ $(function(){
     $('#saik').click(function(){               //サイコロを振るをクリックしたとき
         saiko = Math.floor(Math.random()*6)+1;
         console.log("サイコロの目は"+saiko);
+        $('#gazou').children('img').attr('src', gazo[saiko]);
         pcheck();
 
         for(var i = saiko;i>0;i--){
             susumu();
             
-            if (topp >= 184 && left >= 221){
+            if (topp >= masu.tate[3] && left >= masu.yoko[4]){
                 document.write("ゴール");
                 break;
-            }
+            };
         }
 
         pcheck();
@@ -82,8 +103,6 @@ $(function(){
         x = masu.menn[y][x];
         torappu();
 
-        if (topp >= 184 && left >= 221){
-            document.write("ゴール");
-        }
+        gcheck();
     })
 });
